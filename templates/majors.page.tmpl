@@ -1,0 +1,61 @@
+{{template "base" .}}
+
+{{define "content"}}
+    <div class="container mt-4">
+
+        <div class="row">
+            <div class="col">
+                <img src="/static/images/marjors-suite.png"
+                     class="img-fluid img-thumbnail mx-auto d-block room-image">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col text-center">
+                <h1>Cuartos presidenciales</h1>
+                <p>La mejor manera de encontrarte a ti mismo es perderte en el servicio de lujo de nuestros hoteles.
+                    La mejor manera de encontrarte a ti mismo es perderte en el servicio de lujo de nuestros hoteles
+                    La mejor manera de encontrarte a ti mismo es perderte en el servicio de lujo de nuestros hoteles
+                    La mejor manera de encontrarte a ti mismo es perderte en el servicio de lujo de nuestros hoteles
+                    La mejor manera de encontrarte a ti mismo es perderte en el servicio de lujo de nuestros hoteles
+                    La mejor manera de encontrarte a ti mismo es perderte en el servicio de lujo de nuestros hoteles
+                    La mejor manera de encontrarte a ti mismo es perderte en el servicio de lujo de nuestros hoteles
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col text-center">
+                <a id="check-availability-button" href="#!" class="btn btn-success">Revisar cuartos disponibles</a>
+            </div>
+        </div>
+
+    </div>
+{{end}}
+
+{{define "js"}}
+    <script>
+        document.getElementById('check-availability-button').addEventListener('click', function () {
+
+            let html = `
+                    <form id="check-availability" action="" method="post" novalidate class="needs-validation search-form-modal-width">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row" id="reservation-dates-modal">
+                                    <div class="col">
+                                        <input disabled type="text" required class="form-control" name="start" id="start" placeholder="Llegada">
+                                    </div>
+                                    <div class="col">
+                                        <input disabled type="text" required class="form-control" name="end" id="end" placeholder="Salida">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                `
+
+            attention.custom({msg: html});
+        });
+    </script>
+
+{{end}}

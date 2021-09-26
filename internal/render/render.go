@@ -2,9 +2,10 @@ package render
 
 import (
 	"bytes"
-	"fmt"
-	"github.com/GiovannyHdz/bookings/pkg/config"
-	"github.com/GiovannyHdz/bookings/pkg/models"
+	"errors"
+	config2 "github.com/GiovannyHdz/bookings/internal/config"
+	models2 "github.com/GiovannyHdz/bookings/internal/models"
+	"github.com/justinas/nosurf"
 	"html/template"
 	"log"
 	"net/http"
@@ -16,21 +17,21 @@ var functions = template.FuncMap{
 
 }
 
-var app *config.AppConfig
+var app *config2.AppConfig
 
 // NewTemplates sets the config for the template package
-func NewTemplates(a *config.AppConfig) {
+func NewTemplates(a *config2.AppConfig) {
 	app = a
 }
 
 // AddDefaultData set the default data of all pages
-func AddDefaultData(td *models.TemplateDate) *models.TemplateDate {
-
+func AddDefaultData(td *models2.TemplateDate, r *http.Request) *models2.TemplateDate {
+	td.CSRFToken = nosurf.Token(r)
 	return td
 }
 
 //RenderTemplate renders templates using html/template
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateDate) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models2.TemplateDate) error {
 
 	var tc map[string]*template.Template
 
@@ -43,20 +44,24 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateDate)
 
 	t, ok := tc[tmpl]
 	if !ok {
-		log.Fatal("Could not get template from template cache")
+		log.Println("Could not get template from template cache")
+		return errors.New("Could not get template from template cache")
 	}
 
 	//Used to write until w
 	buf := new(bytes.Buffer)
 
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 
 	_ = t.Execute(buf, td)
 
 	_, err := buf.WriteTo(w)
 	if err != nil {
-		fmt.Println("Error writing template to browser", err)
+		log.Println("Error writing template to browser::", err)
+		return errors.New("Error writing template to browser::" + err.Error())
 	}
+
+	return nil
 }
 
 // CreateTemplateCache creates a template cache as a map

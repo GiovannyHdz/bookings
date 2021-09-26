@@ -1,0 +1,46 @@
+{{template "base" .}}
+
+{{define "content"}}
+    <div class="container mt-4">
+        <div class="col">
+            <h1 class="mt-5 text-center mb-4">Buscar por disponibilidad</h1>
+        </div>
+
+        <div class="col">
+            <div class="row">
+                <form action="/search-availability" method="POST" novalidate class="needs-validation">
+                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row" id="reservation-dates">
+                                <div class="col">
+                                    <label for="start" class="form-label">Fecha de llegada</label>
+                                    <input required type="text" class="form-control" name="start">
+                                </div>
+                                <div class="col">
+                                    <label for="end" class="form-label">Fecha de salida</label>
+                                    <input required type="text" class="form-control" name="end">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+{{end}}
+
+{{define "js"}}
+    <script>
+        // creates a custom date picker
+        const elem = document.getElementById('reservation-dates');
+        const rangepicker = new DateRangePicker(elem, {
+            format: 'mm-dd-yyyy'
+        });
+    </script>
+{{end}}
